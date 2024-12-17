@@ -1,46 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
 
+#include "deps.h"
+#include "a_window.h"
+#include "a_clock.h"
+#include "a_log.h"
 
-const unsigned ARR_SIZE = 16;
-const unsigned ARR_VALUE_SCATTER = 37;
+void keyCallback(
+	GLFWwindow* window, 
+	int key, 
+	int scancode, 
+	int action, 
+	int mods
+)
+{
+	if (action == GLFW_PRESS)
+	{
+		if (key == GLFW_KEY_ESCAPE)
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+}
+
+void mouseButtonCallback(
+	GLFWwindow* window, 
+	int button, 
+	int action, 
+	int mods
+)
+{
+
+}
+
 int main(void)
 {
-	/* Set random seed */
-	srand(time(NULL));
-
-	/* Allocate memory for 4byte array */
-	int* arr = (int*)malloc((size_t)ARR_SIZE * sizeof(int));
-	/* Add values to array (int array - step is 4 bytes) */
-	for (unsigned i = ARR_SIZE - 1; i > 0; i--)
-	{
-		*(arr + (ARR_SIZE - i)) = pow(2, i) + rand() % ARR_VALUE_SCATTER;
-	}
-
-	/* Print values on screen */
-	printf("Values of arr in 4 byte step: ");
-	for (unsigned i = 0; i < ARR_SIZE; i++)
-	{
-		printf("%d ", *(arr + i));
-	}
-	printf("\n\n");
-
-
-	char* arr_byte_ptr = (char*)arr;
-	/* Get each byte in int 4 byte array memory range */
-	printf("Values of arr in 1 byte step (print each byte of each 4byte int):\n");
-	for (unsigned i = 0; i < ARR_SIZE * sizeof(int); i++)
-	{
-		if (i % 4 == 0) printf("\n\t");
-		printf("%d ", *(arr_byte_ptr + i));
-	}
+	a_Logger* logger = loggerInit(LOG_PATH);
+	a_Clock* clock = clockInit();
+	a_Window* window = wInit(logger);
 	
-	printf("\n");
+	glfwSetKeyCallback(window->glfw, keyCallback);
+	glfwSetMouseButtonCallback(window->glfw, mouseButtonCallback);
 
-	/* Clear allocated memory */
-	free(arr);
+	wContext(window, 3, 3);
+	/*
+	 * GameLoop model:
+	 * 		Handle Events (keypressed, mousemoved)
+	 * 		Check Changes (mouse has been moved, item has been dropped)
+	 * 		Update Variables (objects models, camera mvp & etc)
+	 * 		Render
+	 * 		Swap Buffers (blit rendered image to screen)
+	 */
+	while (!glfwWindowShouldClose(window->glfw))
+	{
+		clockStart(clock);
+			wUpdate(window);
+
+			wStartRender(window); /* Start render: Clear window color */
+				/* TODO: Rendering */
+			wEndRender(window); /* End render: Swap buffers */
+		clockEnd(clock);
+		/* Print current fps */
+		// printf("FPS: %.0f", clock->fps);
+	}
+	/* Clear buffers */
+
+	/* Release window&clock */
+	wRelease(window);
+	clockRelease(clock);
+	loggerRelease(logger);
 	
 	return 0;
 }
