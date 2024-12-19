@@ -71,9 +71,9 @@ int main(int argc, char* argv[])
 			{0.0f, 0.5f, 0.0f, 0.f, 0.f, 0.f, 0.f, 0.f}
 		}
 	};
-	a_Mesh* triangle_mesh = meshInit(logger, "hello_triangle", &tris, 9);
+	a_Mesh* triangle_mesh = meshInit(logger, "hello_triangle");
 	// Init vao of triangle mesh
-	initVAO(triangle_mesh);
+	meshAddTriangles(triangle_mesh, &tris, 1);
 
 	a_Program* program = programInit(logger, "a_default.vert", "a_default.frag");
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 			wStartRender(window); /* Start render: Clear window color */
 				programUse(program);
 				programSetFloatUniform(program, (float)clock->time, "u_time");
-				renderMesh(triangle_mesh);
+				meshRender(triangle_mesh);
 				/* TODO: Rendering */
 			wEndRender(window); /* End render: Swap buffers */
 		clockEnd(clock);
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 		// printf("FPS: %.0f", clock->fps);
 	}
 	/* Clear buffers */
-	meshRelease(triangle_mesh);
+	meshReleaseAll(triangle_mesh);
 
 	/* Clear shader programs */
 	programRelease(program);

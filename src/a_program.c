@@ -85,7 +85,7 @@ a_Program* programInit(a_Logger* logger, const char* vs_filename, const char* fs
 void programCompileShader(a_Logger* logger, char** source, unsigned* id, GLuint type)
 {
 	*id = glCreateShader(type);
-	glShaderSource(*id, 1, source, NULL);
+	glShaderSource(*id, 1, (const GLchar * const*)source, NULL);
 	glCompileShader(*id);
 	int success;
 	char log[512];
