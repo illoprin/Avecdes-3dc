@@ -111,6 +111,15 @@ extern void wContext(a_Window* win, int maj, int min)
 	glfwMakeContextCurrent(win->glfw);
 	/* Enable VSync */
 	glfwSwapInterval(1); /* Creates window motion slowdown on X11 */
+
+	/* Init GLEW - OpenGL >3.0 functions */
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK)
+	{
+		fprintf(stderr, "Couldnot initialize GLEW");
+		exit(EXIT_FAILURE);
+	}
+
 	lLog(win->logger, "[INFO] OpenGL context created. Version %d.%d\n", maj, min);
 }
 

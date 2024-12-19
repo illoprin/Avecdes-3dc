@@ -7,16 +7,15 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
+/* OpenGL */
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GLFW/glfw3.h> /* Window */
+
 /* Math and linal */
 #include <math.h>
 #include <cglm/cglm.h>
-
-/* Window */
-#include <GLFW/glfw3.h>
-
-/* OpenGL */
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 /* Misc */
 #include <string.h>

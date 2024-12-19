@@ -9,9 +9,9 @@
 #define MAX_FPS 120
 
 #define LOG_PATH "tmp"
-#define LOG_MAX_LINE 128 /* Max char in line of log */
 #define LOG_MAX 1024 /* Max lines in log */
 #define PATH_CHAR_MAX 128
+#define MAX_LINE 256 /* Max char in line in read/write stream */
 
 
 #endif

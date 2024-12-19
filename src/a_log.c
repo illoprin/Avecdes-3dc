@@ -54,7 +54,7 @@ extern void loggerRelease(a_Logger* logger)
 {
 	if (logger != NULL)
 	{
-		if (logger->log_file != NULL)
+		if (logger->log_file)
 			fclose(logger->log_file);
 		free(logger);
 	}

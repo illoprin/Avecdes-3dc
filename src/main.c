@@ -1,8 +1,9 @@
-
 #include "deps.h"
 #include "a_window.h"
 #include "a_clock.h"
 #include "a_log.h"
+#include "mesh/a_mesh.h"
+#include "a_program.h"
 
 void keyCallback(
 	GLFWwindow* window, 
@@ -29,16 +30,32 @@ void mouseButtonCallback(
 
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
 	a_Logger* logger = loggerInit(LOG_PATH);
 	a_Clock* clock = clockInit();
 	a_Window* window = wInit(logger);
-	
+
 	glfwSetKeyCallback(window->glfw, keyCallback);
 	glfwSetMouseButtonCallback(window->glfw, mouseButtonCallback);
 
-	wContext(window, 3, 3);
+	wContext(window, 4, 3); // Create OpenGL context
+
+	struct Triangle tris = 
+	{
+		{
+			{-0.5f, -0.5f, 0.0f, 0.f, 0.f, 0.f, 0.f, 0.f},
+			{0.5f, -0.5f, 0.0f, 0.f, 0.f, 0.f, 0.f, 0.f},
+			{0.0f, 0.5f, 0.0f, 0.f, 0.f, 0.f, 0.f, 0.f}
+		}
+	};
+	a_Mesh* triangle_mesh = meshInit(logger, "hello_triangle", &tris, 9);
+	// Init vao of triangle mesh
+	initVAO(triangle_mesh);
+
+	a_Program* program = programInit(logger, "a_default.vert", "a_default.frag");
+
+
 	/*
 	 * GameLoop model:
 	 * 		Handle Events (keypressed, mousemoved)
@@ -53,6 +70,9 @@ int main(void)
 			wUpdate(window);
 
 			wStartRender(window); /* Start render: Clear window color */
+				programUse(program);
+				programSetFloatUniform(program, (float)clock->time, "u_time");
+				renderMesh(triangle_mesh);
 				/* TODO: Rendering */
 			wEndRender(window); /* End render: Swap buffers */
 		clockEnd(clock);
@@ -60,6 +80,10 @@ int main(void)
 		// printf("FPS: %.0f", clock->fps);
 	}
 	/* Clear buffers */
+	meshRelease(triangle_mesh);
+
+	/* Clear shader programs */
+	programRelease(program);
 
 	/* Release window&clock */
 	wRelease(window);

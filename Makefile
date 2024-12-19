@@ -19,10 +19,10 @@ LIBS_PATH=libs
 # lGLFW - OpenGL window
 # lGLU - OpenGL utils 
 # lGL - OpenGL
-LIBS=-lm -lglfw -lGLU -lGL -lXrandr -lXxf86vm -lXi -lXinerama -lX11 -lrt -ldl
+LIBS=-lm -lglfw -lGLU -lGL -lXrandr -lXxf86vm -lXi -lXinerama -lX11 -lrt -ldl -lGLEW
 
 run:
-	$(CC) $(CFLAGS) -g $(SRCS) -I $(INCLUDE_PATH) -L $(LIBS_PATH) -o $(TARGET) $(LIBS)
+	$(CC) $(CFLAGS) -DGLEW_STATIC -g $(SRCS) -I $(INCLUDE_PATH) -L $(LIBS_PATH) -o $(TARGET) $(LIBS)
 	./$(TARGET)
 
 test:
