@@ -1,5 +1,6 @@
 #ifndef A_CLOCK_C
 #define A_CLOCK_C
+
 #include "a_clock.h"
 
 a_Clock* clockInit()
@@ -24,13 +25,16 @@ void clockEnd(a_Clock* aclock)
 	/* Calc delta time in seconds */
 	aclock->deltaTime = (aclock->time - aclock->lastTime);
 	aclock->fps = aclock->deltaTime != 0.0 ? 1 / aclock->deltaTime : 999.0;
-	/*	Limit fps bad attempt
-		if (aclock->deltaTime < 1.0 / MAX_FPS)
-		{
-			double sleep_time = (1.0 / MAX_FPS) - aclock->deltaTime;
-			usleep((int)(sleep_time * 1000000));
-		}
+	/*	Limit fps bad attempt 
+	if (aclock->deltaTime < 1.0 / MAX_FPS)
+	{
+		double sleep_time = (1.0 / MAX_FPS) - aclock->deltaTime;
+		usleep((int)(sleep_time * 1000000));
+	}
 	*/
+	
+	if ((int)aclock->time % 5 == 0 && (int)aclock->time > 0)
+		printf("TIME: %.2f | FPS: %.0f\n", aclock->time, aclock->fps);
 }
 
 void clockRelease(a_Clock* aclock)

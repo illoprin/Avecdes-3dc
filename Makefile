@@ -19,6 +19,7 @@ LIBS_PATH=libs
 # lGLFW - OpenGL window
 # lGLU - OpenGL utils 
 # lGL - OpenGL
+# lGLEW - new spec OpenGL >3.0 functions (glGenArrays and etc.)
 LIBS=-lm -lglfw -lGLU -lGL -lXrandr -lXxf86vm -lXi -lXinerama -lX11 -lrt -ldl -lGLEW
 
 run:

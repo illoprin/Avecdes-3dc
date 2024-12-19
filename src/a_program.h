@@ -21,7 +21,7 @@ void programLink(a_Logger* logger, unsigned* vs_id,
 /* Attributes */
 void programBindAttribute(a_Program* prog, GLuint id, const char* name);
 
-/* Uniform Getters */
+/* Uniform Setters */
 void programSetFloatUniform(a_Program* prog, float value, const char* uniform_name);
 void programSetIntUniform(a_Program* prog, int value, const char* uniform_name);
 void programSetVector3Uniform(a_Program* prog, vec3 value, const char* uniform_name);

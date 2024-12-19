@@ -2,11 +2,15 @@
 #include "a_window.h"
 #include "a_clock.h"
 #include "a_log.h"
-#include "mesh/a_mesh.h"
+#include "game_object/a_mesh.h"
 #include "a_program.h"
+#include "a_bcontroller.h"
+
+a_Window* window = NULL;
+a_BasicController* bcontroller = NULL;
 
 void keyCallback(
-	GLFWwindow* window, 
+	GLFWwindow* glfw, 
 	int key, 
 	int scancode, 
 	int action, 
@@ -16,7 +20,25 @@ void keyCallback(
 	if (action == GLFW_PRESS)
 	{
 		if (key == GLFW_KEY_ESCAPE)
-			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			glfwSetWindowShouldClose(glfw, GLFW_TRUE);
+
+		if (window)
+		{
+			if (key == GLFW_KEY_TAB && bcontroller)
+			{
+				if (bcontroller->isGameMode == true)
+				{
+					wToggleSTDMode(window);
+					bcontroller->isGameMode = false;
+				}
+				else
+				{
+					wToggleGameMode(bcontroller->window);
+					bcontroller->isGameMode = true;
+				}
+			}
+		}
+		
 	}
 }
 
@@ -34,12 +56,12 @@ int main(int argc, char* argv[])
 {
 	a_Logger* logger = loggerInit(LOG_PATH);
 	a_Clock* clock = clockInit();
-	a_Window* window = wInit(logger);
+	window = wInit(logger);
 
 	glfwSetKeyCallback(window->glfw, keyCallback);
 	glfwSetMouseButtonCallback(window->glfw, mouseButtonCallback);
 
-	wContext(window, 4, 3); // Create OpenGL context
+	wContext(window); // Create OpenGL context
 
 	struct Triangle tris = 
 	{
@@ -55,6 +77,7 @@ int main(int argc, char* argv[])
 
 	a_Program* program = programInit(logger, "a_default.vert", "a_default.frag");
 
+	bcontroller = ctlCreate(window, program);
 
 	/*
 	 * GameLoop model:
@@ -68,7 +91,9 @@ int main(int argc, char* argv[])
 	{
 		clockStart(clock);
 			wUpdate(window);
-
+			/* ============ Update ============ */
+			ctlUpdate(bcontroller, (float)clock->deltaTime);
+			/* ================================ */
 			wStartRender(window); /* Start render: Clear window color */
 				programUse(program);
 				programSetFloatUniform(program, (float)clock->time, "u_time");

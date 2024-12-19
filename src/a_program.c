@@ -2,7 +2,6 @@
 #define A_PROGRAM_C
 
 #include "a_program.h"
-#include "a_utils.h"
 
 /*
  * ShaderProgram
@@ -79,7 +78,7 @@ a_Program* programInit(a_Logger* logger, const char* vs_filename, const char* fs
 	return prog;
 }
 
-/* 
+/*f
 	Compile Vertex and Fragment shaders
 	Returns compiled compild vertex and fragment shader indices
 */
@@ -143,19 +142,19 @@ void programSetIntUniform(a_Program* prog, int value, const char* uniform_name)
 void programSetVector3Uniform(a_Program* prog, vec3 value, const char* uniform_name)
 {
 	GLint id = getUniformID(prog, uniform_name);
-	if (id >= 0) glUniform3f(id, value[0], value[1], value[2]);
+	if (id >= 0) glUniform3f(id, (GLfloat)value[0], (GLfloat)value[1], (GLfloat)value[2]);
 }
 
 void programSetVector2Uniform(a_Program* prog, vec2 value, const char* uniform_name)
 {
 	GLint id = getUniformID(prog, uniform_name);
-	if (id >= 0) glUniform2f(id, value[0], value[1]);
+	if (id >= 0) glUniform2f(id, (GLfloat)value[0], (GLfloat)value[1]);
 }
 
 void programSetMatrix4Uniform(a_Program* prog, mat4 value, const char* uniform_name)
 {
 	GLint id = getUniformID(prog, uniform_name);
-	if (id >= 0) glUniformMatrix4fv(id, 1, GL_FALSE, &(value[0][0]));
+	if (id >= 0) glUniformMatrix4fv(id, 1, GL_FALSE, (const GLfloat *)value[0]);
 }
 
 void programUse(a_Program* program)

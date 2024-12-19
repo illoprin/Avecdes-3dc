@@ -18,7 +18,7 @@ a_Logger* loggerInit (const char* dir_path)
 	strftime(
 		file_name, 
 		PATH_CHAR_MAX - strlen(dir_path), 
-		"%d.%m.%Y %H:%M:%S", 
+		"%d.%m.%Y_%H:%M:%S", 
 		localtime(&current_time)
 	);
 	snprintf(file_path, PATH_CHAR_MAX, "%s/%s.log", dir_path, file_name);

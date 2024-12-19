@@ -36,7 +36,7 @@ extern void wToggleGameMode(a_Window* win);
 extern void wToggleSTDMode(a_Window* win);
 
 /* Create OpenGL Context */
-extern void wContext(a_Window* win, int maj, int min);
+extern void wContext(a_Window* win);
 
 /* Update window variables */
 extern void wUpdate(a_Window* win);

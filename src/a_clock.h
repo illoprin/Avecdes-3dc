@@ -1,5 +1,6 @@
 #ifndef A_CLOCK_H
 #define A_CLOCK_H
+
 #include "deps.h"
 
 typedef struct a_Clock {

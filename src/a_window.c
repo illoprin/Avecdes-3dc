@@ -2,6 +2,7 @@
 #define AVE_WINDOW_C
 
 #include "a_window.h"
+#include "a_renderer.h"
 
 static void wErrorCallback(int error, const char* desc)
 {
@@ -52,14 +53,14 @@ a_Window* wInit(a_Logger* logger)
 	/* Init GLFW Window */
 	if (!glfwInit())
 	{
-		wErrorCallback(-1, "Can't init GLFW");
+		wErrorCallback(-1, "Can't init GLFW\n");
 		exit(EXIT_FAILURE);
 	}
 	
 	window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE, NULL, NULL);
 	if (!window)
 	{
-		wErrorCallback(-1, "Can't create GLFW window. Window pointer is NULL!");
+		wErrorCallback(-1, "Can't create GLFW window. Window pointer is NULL!\n");
 		exit(EXIT_FAILURE);
 	}
 	awin->glfw = window;
@@ -92,35 +93,23 @@ extern void wToggleSTDMode(a_Window* win)
 /* Update window variables and pool GLFW events */
 extern void wUpdate(a_Window* win)
 {
-	glfwPollEvents(); /* Handle events */
-
 	/* Calculate mouse positions delta */
 	glfwGetCursorPos(win->glfw, &win->mouse_x, &win->mouse_y);
 	win->mouseDeltaX = win->mouse_x - win->mouse_lx;
 	win->mouseDeltaY = win->mouse_y - win->mouse_ly;
 	win->mouse_lx = win->mouse_x;
-	win->mouse_ly = win->mouse_y;	
+	win->mouse_ly = win->mouse_y;
+
+	glfwPollEvents(); /* Handle events */
 }
 
 /* Make OpenGL draw context */
-extern void wContext(a_Window* win, int maj, int min)
+extern void wContext(a_Window* win)
 {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, maj);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, min);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwMakeContextCurrent(win->glfw);
-	/* Enable VSync */
-	glfwSwapInterval(1); /* Creates window motion slowdown on X11 */
+	ctxInit(win, 4, 3);
+	ctxPrepare();
 
-	/* Init GLEW - OpenGL >3.0 functions */
-	glewExperimental = true;
-	if (glewInit() != GLEW_OK)
-	{
-		fprintf(stderr, "Couldnot initialize GLEW");
-		exit(EXIT_FAILURE);
-	}
-
-	lLog(win->logger, "[INFO] OpenGL context created. Version %d.%d\n", maj, min);
+	lLog(win->logger, "[INFO] OpenGL context created. Version 4.3\n");
 }
 
 extern void wTitlef(a_Window* win, const char* format, ...)
@@ -138,8 +127,10 @@ extern void wStartRender(a_Window* win)
 {
 	int width, height;
 	glfwGetWindowSize(win->glfw, &width, &height);
+	// Set OpenGL viewport
 	glViewport(0, 0, width, height);
-	glClear(GL_COLOR_BUFFER_BIT);
+	// Clear context
+	ctxClear((vec3){0.1f, 0.1f, 0.145f});
 }
 
 extern void wEndRender(a_Window* win)
