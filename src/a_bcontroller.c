@@ -53,7 +53,7 @@ static void ctlHandleMouseEvents(a_BasicController* ctl, float deltaTime)
 	a_Camera* cam = ctl->camera;
 	a_Window* win = ctl->window;
 	cam->pitch -= (win->mouseDeltaY * PLAYER_SENSITIVITY * deltaTime);
-	cam->pitch = glm_clamp(cam->pitch, -90.f, 90.f);
+	cam->pitch = glm_clamp(cam->pitch, -89.99f, 89.99f);
 	cam->yaw += win->mouseDeltaX * PLAYER_SENSITIVITY * deltaTime;
 }
 

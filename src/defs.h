@@ -1,8 +1,8 @@
 #ifndef A_DEFS_H
 #define A_DEFS_H
 
-#define WIN_WIDTH 1280
-#define WIN_HEIGHT 720
+#define WIN_WIDTH 1600
+#define WIN_HEIGHT 900
 #define WIN_RESIZEABLE 0
 #define WIN_TITLE "Game"
 #define WIN_MAX_TITLE 64 /* Max 64 symbols in title */

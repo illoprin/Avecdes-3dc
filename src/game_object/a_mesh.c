@@ -128,7 +128,7 @@ extern void meshRender(a_Mesh* mesh)
 
 extern void meshReleaseVAO(a_Mesh* mesh)
 {
-	if (mesh)
+	if (mesh != NULL)
 	{
 		// Release VBO and indices list
 		if (mesh->vbos_list.data)
@@ -148,7 +148,7 @@ extern void meshReleaseVAO(a_Mesh* mesh)
 
 extern void meshReleaseAll(a_Mesh* mesh)
 {
-	if (mesh) {
+	if (mesh != NULL) {
 		// Release VBO and indices list
 		if (mesh->vbos_list.data)
 		{
